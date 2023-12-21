@@ -184,8 +184,8 @@ class build_from_file:
             backend_name2 = "Fake{}V2".format(backend_name.title())
             
             with open(self.backend_absdir+"/__init__.py",'w') as f:
-                print("from .{0} import {1}\n".format(self.backend_dir, backend_name1), file=f)
-                print("from .{0} import {1}\n".format(self.backend_dir, backend_name2), file=f)
+                f.write("from .{0} import {1}\n".format(self.backend_dir, backend_name1))
+                f.write("from .{0} import {1}\n".format(self.backend_dir, backend_name2))
     
             with open(self.backend_absdir+"/fake_{}.py".format(backend_name),'w') as f:
                 f.write("import os\n")
