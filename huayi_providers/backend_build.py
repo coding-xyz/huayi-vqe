@@ -16,7 +16,8 @@ class build_from_file:
                  backend_name:str,
                  backend_version:str,
                  qubits_data:str,
-                 gates_data:str):
+                 gates_data:str,
+                 gate_radius=None):
 
         self.backend_dir = "fake_{}".format(backend_name)
         self.backend_absdir = os.path.join(os.path.dirname(__file__), self.backend_dir)
@@ -28,7 +29,8 @@ class build_from_file:
                           qubits_data,
                           gates_data),
             self.create_conf(backend_name,
-                         backend_version)
+                         backend_version,
+                         gate_radius)
         )):
             print("New backends created, please import the backends with:")
             print("from huayi_providers.{} import {}, {}".format(self.backend_dir, self.backend_names[0], self.backend_names[1]))
@@ -94,13 +96,18 @@ class build_from_file:
 
     def create_conf(self,
                     backend_name,
-                    backend_version) -> bool:
+                    backend_version,
+                    gates_radius) -> bool:
         
         try:
             n_qubits = self.n_qubits
             # Fully connected map
-            coupling_map = [[i,j] for i in range(n_qubits) 
-                            for j in list(range(i))+list(range(i+1,n_qubits))]
+            if gates_radius:
+                coupling_map = [[i,j] for i in range(n_qubits) 
+                                for j in list(range(max(0,i-gates_radius),i))+list(range(i+1,min(i+1+gates_radius,n_qubits)))]
+            else:
+                coupling_map = [[i,j] for i in range(n_qubits) 
+                                for j in list(range(i))+list(range(i+1,n_qubits))]
 
             basis_gates = [
                 "id",
@@ -202,7 +209,7 @@ class build_from_file:
             with open(os.path.dirname(__file__)+"/__init__.py", 'r') as f:
                 lines = f.readlines()
                 for line in lines:
-                    if "from .{}".format(self.backend_dir) in line:
+                    if "from .{} import *".format(self.backend_dir) in line:
                         isimported = True
             if not isimported:
                 with open(os.path.dirname(__file__)+"/__init__.py", 'a') as f:
