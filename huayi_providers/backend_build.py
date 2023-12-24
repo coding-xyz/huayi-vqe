@@ -158,6 +158,7 @@ class build_from_file:
                 memory=True,
                 max_shots=6000,
                 coupling_map=coupling_map,
+                description='{} qubit device'.format(n_qubits), # Necessary for experiments
                 online_date=now_time(), # somehow oneline_date must be defined to create the backend
                 ).to_dict()
 
