@@ -97,14 +97,14 @@ class build_from_file:
     def create_conf(self,
                     backend_name,
                     backend_version,
-                    gates_radius) -> bool:
+                    gate_radius) -> bool:
         
         try:
             n_qubits = self.n_qubits
             # Fully connected map
-            if gates_radius:
+            if gate_radius:
                 coupling_map = [[i,j] for i in range(n_qubits) 
-                                for j in list(range(max(0,i-gates_radius),i))+list(range(i+1,min(i+1+gates_radius,n_qubits)))]
+                                for j in list(range(max(0,i-gate_radius),i))+list(range(i+1,min(i+1+gate_radius,n_qubits)))]
             else:
                 coupling_map = [[i,j] for i in range(n_qubits) 
                                 for j in list(range(i))+list(range(i+1,n_qubits))]
