@@ -1,0 +1,3 @@
+[submodule "huayi_providers"]
+	path = huayi_providers
+	url = https://github.com/coding-xyz/huayi-providers.git
